@@ -1,7 +1,7 @@
 # JapaneseHelperBot
 A telegram bot that uses scraped data from japanesepod101 and sends you an image everyday
 ## How to use
-- Run ```pip install -R req.txt```
+- Run ```pip install -r req.txt```
 - Run the collect script and let it scrape the image links
 - Then it will download
 - After that you can filter out the images if you want
