@@ -27,7 +27,7 @@ async def sendImages(update : Update, context : ContextTypes.DEFAULT_TYPE):
                 timeout = (size / (1/8)) + 15
             await update.message.reply_photo(imageToSend, read_timeout=timeout, write_timeout=timeout)
             print(f"{username} sent an image to {name}")
-            await asyncio.sleep(3)
+            await asyncio.sleep(24*60*60)
     except Exception as e:
         print("Oopsie ", e)
 
