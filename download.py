@@ -11,6 +11,8 @@ def downloadImages():
     linksText = linksFile.read()
     # Removes all single quotes
     linksText = linksText.replace("'","")
+    linksText = linksText.replace("]","")
+    linksText = linksText.replace("[","")
     # Splits the text at ,
     links : list = linksText.split(",")
 
