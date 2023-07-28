@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options 
 from bs4 import BeautifulSoup as soup
+from download import downloadImages
 
 link : str = "https://japanesepod101.tumblr.com/"
 
@@ -33,3 +34,4 @@ except Exception as e:
     print("oopsie ",e)
 driver.quit()
 print("Session ended")
+downloadImages()
