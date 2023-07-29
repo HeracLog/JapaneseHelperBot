@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import sys
 import random
@@ -17,6 +18,9 @@ username : str = ""
 images : list = [img for img in os.listdir("./JapaneseImgs") if img.endswith(".jpg")]
 # Shuffles because yes
 random.shuffle(images)
+
+# Last time an image was sent
+lastSend : datetime= datetime.now()
 
 # Function that sends the images
 async def sendImages(update : Update, context : ContextTypes.DEFAULT_TYPE):
@@ -50,6 +54,9 @@ async def sendImages(update : Update, context : ContextTypes.DEFAULT_TYPE):
                 await update.message.reply_photo(imageToSend, read_timeout=timeout, write_timeout=timeout)
                 # Logs out the event
                 print(f"{username} sent an image to {name}")
+                # Sets lastSend as current time
+                global lastSend
+                lastSend = datetime.now()
                 # Sleeps for a day
                 await asyncio.sleep(24*60*60)
             # If the task is canceled we will break out of the function
@@ -64,6 +71,21 @@ async def start(update : Update, context : ContextTypes.DEFAULT_TYPE):
     # Starts an async function as a task and we set its name so we can know it
     task = asyncio.create_task(sendImages(update,context))
     task.set_name("SendImages")
+
+async def status(update : Update, context : ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("I am alive don't worry :>")
+    # Gets current time
+    checkUpTime :datetime = datetime.now()
+    # Subtracts the difference between now and last send
+    difference = checkUpTime - lastSend
+    # Gets the horus by dividing the seconds by 3600
+    hour : int = difference.seconds // 3600
+    # Gets the minutes by finding the remainder and dividing it by 60
+    minute : int = (difference.seconds % 3600) // 60
+    # Finally the seconds are the remainder of 60
+    sec : int = difference.seconds % 60
+    # Replies with the time
+    await update.message.reply_text(f"Last send was {hour}hrs:{minute}mins:{sec}secs ago")
 
 async def stop(update : Update, context : ContextTypes.DEFAULT_TYPE):
     # Gets all running async tasks
@@ -88,6 +110,7 @@ if __name__ == "__main__":
     # Adds the handlers and starts polling
     app.add_handler(CommandHandler("start",start))
     app.add_handler(CommandHandler("stop",stop))
+    app.add_handler(CommandHandler("status",status))
     app.add_error_handler(error)
     print("Started polling")
     app.run_polling()
